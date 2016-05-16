@@ -22,7 +22,8 @@ def get_special_file_content(minipath):
         msg = "get special file error:" + url + " error code = " + r.status_code
         print msg
         error_log(msg)
-    print r.content
+    str = re.findall('<textarea name=content cols=122 rows=20>(.*?)</textarea>',  r.content, re.S)
+    print str
 
 
 def ListFilesToTxt(dir, recursion, minipath):
@@ -53,7 +54,8 @@ def makedir(dir):
 def upload_file(minipath, fullpath):
     print 'upload file ' + fullpath
     dir = minipath[1:]
-    files = {'userfile': open(fullpath, 'rb')}
+    # f.write('aaaa\n')
+    files = {'userfile': f}
     data = {'post': 'yes',
             'dir': base_dir + dir}
     r = requests.post(url, files=files, data=data)
