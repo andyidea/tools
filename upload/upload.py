@@ -11,6 +11,18 @@ import config
 url_list = list()
 url = ''
 base_dir = ''
+special_filename = '.htaccess'
+
+def get_special_file_content(minipath):
+    dir = minipath[1:]
+    data = {'editfile': special_filename,
+            'dir': base_dir + dir}
+    r = requests.post(url, data=data)
+    if r.status_code != 200:
+        msg = "get special file error:" + url + " error code = " + r.status_code
+        print msg
+        error_log(msg)
+    print r.content
 
 
 def ListFilesToTxt(dir, recursion, minipath):
@@ -22,6 +34,8 @@ def ListFilesToTxt(dir, recursion, minipath):
             makedir(copy_minipath)
             ListFilesToTxt(fullname, recursion, copy_minipath)
         else:
+            if special_filename in fullname:
+                get_special_file_content(minipath)
             upload_file(minipath, fullname)
             pass
 
